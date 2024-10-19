@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "501790631469",
+    "project_id": "docstore1-b0f9f",
+    "storage_bucket": "docstore1-b0f9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501790631469:android:d580f6a714664843e07aa4",
+        "android_client_info": {
+          "package_name": "com.android.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqmGa2qnNzlLCkdJjJWvxCSvzjAIgtE3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:501790631469:android:a6fcdc48d49be63ce07aa4",
+        "android_client_info": {
+          "package_name": "com.example.billstore_2"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqmGa2qnNzlLCkdJjJWvxCSvzjAIgtE3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
