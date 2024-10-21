@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'package:billstore_2/Screen1.dart'; // Your main screen after login
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart'; // For animations (optional)
 import 'package:lottie/lottie.dart';
-import 'loginpage.dart'; // Import the HomePage (login page) here
+import 'package:firebase_auth/firebase_auth.dart'; // Import Firebase Auth
+import 'login_screen.dart'; // Import the Login screen
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -15,14 +17,30 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    _checkAuthentication(); // Check authentication status on init
+  }
 
-    // Initiate a timer to navigate to the HomePage (Login Page) after 5 seconds
-    _timer = Timer(Duration(seconds: 5), () {
+  Future<void> _checkAuthentication() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
+
+    // Delay for a short duration (optional)
+    await Future.delayed(Duration(seconds: 2));
+
+    User? user = _auth.currentUser; // Get the currently logged-in user
+
+    if (user != null) {
+      // If user is logged in, navigate to the main screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomePage()), // Navigate to HomePage (Login Page)
+        MaterialPageRoute(builder: (context) => Screen1()), // Replace with your main screen
       );
-    });
+    } else {
+      // If no user is logged in, navigate to the login screen
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()), // Navigate to Login Page
+      );
+    }
   }
 
   @override

@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
       // Navigate to another page upon successful login
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => screen1()), // Replace with your next page
+        MaterialPageRoute(builder: (context) => Screen1()), // Replace with your next page
       );
     } on FirebaseAuthException catch (e) {
       // Handle error

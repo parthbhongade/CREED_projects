@@ -1,18 +1,20 @@
-import 'package:billstore_2/billsections.dart';
-import 'package:billstore_2/electricpage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'pdffiles/healthfile.dart';
+import 'profile.dart';
+import 'package:billstore_2/billsections.dart';
+import 'package:billstore_2/electricpage.dart';
+import 'package:billstore_2/pdffiles/healthfile.dart';
 
-class screen1 extends StatefulWidget {
+
+class Screen1 extends StatefulWidget {
   @override
-  State<screen1> createState() => _screen1State();
+  State<Screen1> createState() => _Screen1State();
 }
 
-class _screen1State extends State<screen1> {
+class _Screen1State extends State<Screen1> with TickerProviderStateMixin {
   List mydomain = [
     ["ELECTRICITY", "assets/images/gadgets.png"],
     ["HEALTH", "assets/images/healthcare.png"],
@@ -22,6 +24,27 @@ class _screen1State extends State<screen1> {
 
   final ImagePicker _picker = ImagePicker();
   File? _pickedImage;
+
+  bool _isTextVisible = false;
+  bool _isCardAnimated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Trigger the text animation
+    Future.delayed(Duration(milliseconds: 1000), () {
+      setState(() {
+        _isTextVisible = true;
+      });
+    });
+
+    // Trigger the card animation
+    Future.delayed(Duration(milliseconds: 2000), () {
+      setState(() {
+        _isCardAnimated = true;
+      });
+    });
+  }
 
   // Open a dialog to create a new domain
   Future<void> _openCreateDomainDialog() async {
@@ -42,10 +65,11 @@ class _screen1State extends State<screen1> {
               const SizedBox(height: 10),
               _pickedImage == null
                   ? Text("No image selected")
-                  : Image.file(_pickedImage!, height: 100), // Show selected image
+                  : Image.file(_pickedImage!, height: 100),
               TextButton(
                 onPressed: () async {
-                  final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+                  final XFile? image =
+                  await _picker.pickImage(source: ImageSource.gallery);
                   if (image != null) {
                     setState(() {
                       _pickedImage = File(image.path);
@@ -90,7 +114,6 @@ class _screen1State extends State<screen1> {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          // Custom app bar
           children: [
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 20, horizontal: 40),
@@ -99,38 +122,64 @@ class _screen1State extends State<screen1> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0), // Left padding for menu icon
+                  padding: const EdgeInsets.only(left: 16.0),
                   child: Image.asset(
                     "assets/images/menu.png",
                     width: 20,
                     height: 20,
                   ),
                 ),
-                const Padding(
-                  padding: const EdgeInsets.only(right: 16.0), // Right padding for person icon
-                  child: Icon(
-                    Icons.person,
-                    size: 40,
-                    color: Colors.blueGrey,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ProfileScreen(),
+                      ),
+                    );
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 16.0),
+                    child: Icon(
+                      Icons.person,
+                      size: 40,
+                      color: Colors.blueGrey,
+                    ),
                   ),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             Padding(
               padding: const EdgeInsets.only(left: 35),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Welcome back", style: GoogleFonts.actor(fontSize: 25)),
-                  Text("DOC STORE", style: GoogleFonts.bebasNeue(fontSize: 80)),
+                  // Animated "Welcome back" text with fade-in and scale effect
+                  AnimatedOpacity(
+                    opacity: _isTextVisible ? 1.0 : 0.0,
+                    duration: Duration(seconds: 1),
+                    child: AnimatedScale(
+                      scale: _isTextVisible ? 1.0 : 0.8,
+                      duration: Duration(seconds: 1),
+                      child: Text("Welcome back",
+                          style: GoogleFonts.actor(fontSize: 25)),
+                    ),
+                  ),
+                  // Animated "DOC STORE" text with fade-in and scale effect
+                  AnimatedOpacity(
+                    opacity: _isTextVisible ? 1.0 : 0.0,
+                    duration: Duration(seconds: 1),
+                    child: AnimatedScale(
+                      scale: _isTextVisible ? 1.0 : 0.8,
+                      duration: Duration(seconds: 1),
+                      child: Text("DOC STORE",
+                          style: GoogleFonts.bebasNeue(fontSize: 80)),
+                    ),
+                  ),
                 ],
               ),
             ),
-
-            // Grid for storing PDFs and other documents
             Expanded(
               child: GridView.builder(
                 padding: EdgeInsets.all(10),
@@ -138,26 +187,38 @@ class _screen1State extends State<screen1> {
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2, childAspectRatio: 1 / 1.2),
                 itemBuilder: (BuildContext context, int index) {
-                  return InkWell(
-                    onTap: () {
-                      switch (index) {
-                        case 0:
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => electricpage()),
-                          );
-                          break;
-                        case 1:
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HealthFile()),
-                          );
-                          break;
-                      }
-                    },
-                    child: billsection(
-                      domains: mydomain[index][0],
-                      path: mydomain[index][1],
+                  return AnimatedScale(
+                    scale: _isCardAnimated ? 1.0 : 0.9,
+                    duration: Duration(milliseconds: 500),
+                    curve: Curves.easeInOut,
+                    child: InkWell(
+                      radius: 50,
+                      borderRadius: BorderRadius.circular(20),
+                      onTap: () {
+                        switch (index) {
+                          case 0:
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => electricpage()),
+                            );
+                            break;
+                          case 1:
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => HealthFile()),
+                            );
+                            break;
+                        }
+                      },
+                      child: Hero(
+                        tag: mydomain[index][0],
+                        child: billsection(
+                          domains: mydomain[index][0],
+                          path: mydomain[index][1],
+                        ),
+                      ),
                     ),
                   );
                 },
@@ -166,9 +227,8 @@ class _screen1State extends State<screen1> {
           ],
         ),
       ),
-      // Floating Action Button to add a new domain
       floatingActionButton: FloatingActionButton(
-        onPressed: _openCreateDomainDialog, // Open the domain creation dialog
+        onPressed: _openCreateDomainDialog,
         child: Icon(Icons.add),
         backgroundColor: Colors.blueGrey,
       ),
