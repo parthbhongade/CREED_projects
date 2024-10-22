@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 import 'package:google_fonts/google_fonts.dart';
 import 'login_screen.dart'; // Import the Login screen
 
@@ -13,30 +12,21 @@ class SignUpScreen extends StatefulWidget {
 
 class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController emailController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController(); // Changed to username
+  final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance; // Firestore instance
 
   String errorMessage = '';
 
-  // Method to register a user and save username to Firestore
   Future<void> _register() async {
     try {
-      // Create user with email and password
       UserCredential userCredential = await _auth.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
-      // Optionally, update the display name for the user (not saved in Firestore)
-      await userCredential.user?.updateDisplayName(usernameController.text.trim());
-
-      // Save the username and email in Firestore
-      await _firestore.collection('users').doc(userCredential.user?.uid).set({
-        'username': usernameController.text.trim(),
-        'email': emailController.text.trim(),
-      });
+      // Optionally, update the display name for the user
+      await userCredential.user?.updateDisplayName(nameController.text.trim());
 
       // Navigate to the login screen or main app screen
       Navigator.pushReplacement(
@@ -107,9 +97,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             controller: emailController,
                           ),
                           RoundedInputField(
-                            hintText: "Username", // Changed from Name to Username
+                            hintText: "Name",
                             icon: Icons.person,
-                            controller: usernameController, // Using username controller
+                            controller: nameController,
                           ),
                           RoundedPasswordField(controller: passwordController),
                           RoundedButton(
@@ -155,7 +145,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 }
 
-// RoundedButton widget
 class RoundedButton extends StatelessWidget {
   final String text;
   final VoidCallback press;
@@ -192,7 +181,6 @@ class RoundedButton extends StatelessWidget {
   }
 }
 
-// RoundedInputField widget
 class RoundedInputField extends StatelessWidget {
   final String hintText;
   final IconData icon;
@@ -227,7 +215,6 @@ class RoundedInputField extends StatelessWidget {
   }
 }
 
-// RoundedPasswordField widget
 class RoundedPasswordField extends StatefulWidget {
   final TextEditingController controller;
 

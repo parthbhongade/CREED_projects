@@ -7,6 +7,7 @@ import 'profile.dart';
 import 'package:billstore_2/billsections.dart';
 import 'package:billstore_2/electricpage.dart';
 import 'package:billstore_2/pdffiles/healthfile.dart';
+import 'harwarefile.dart';
 
 
 class Screen1 extends StatefulWidget {
@@ -200,7 +201,7 @@ class _Screen1State extends State<Screen1> with TickerProviderStateMixin {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => electricpage()),
+                                  builder: (context) => ElectricityBill()), // page routing to another page (electricity)
                             );
                             break;
                           case 1:
@@ -210,6 +211,12 @@ class _Screen1State extends State<Screen1> with TickerProviderStateMixin {
                                   builder: (context) => HealthFile()),
                             );
                             break;
+                          case 2:
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => HardwareBill()),
+                            );
                         }
                       },
                       child: Hero(

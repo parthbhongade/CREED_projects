@@ -7,15 +7,14 @@ import 'package:image_picker/image_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'pdffiles/electricbillviewer.dart';
-// Ensure correct import for your file viewer
+import 'pdffiles/electricbillviewer.dart'; // Ensure correct import for your file viewer
 
-class ElectricityBill extends StatefulWidget {
+class HardwareBill extends StatefulWidget {
   @override
-  State<ElectricityBill> createState() => _ElectricityBillState();
+  State<HardwareBill> createState() => _HardwareBillState();
 }
 
-class _ElectricityBillState extends State<ElectricityBill> {
+class _HardwareBillState extends State<HardwareBill> {
   final ImagePicker _picker = ImagePicker();
   List<Map<String, dynamic>> _bills = []; // Store metadata for each bill
   List<Map<String, dynamic>> _filteredBills = []; // For filtered search
@@ -39,7 +38,7 @@ class _ElectricityBillState extends State<ElectricityBill> {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid; // Get current user UID
       QuerySnapshot snapshot = await FirebaseFirestore.instance
-          .collection('electricity_bills')
+          .collection('hardware_bills')
           .where('userId', isEqualTo: userId) // Filter by user ID
           .get();
 
@@ -61,7 +60,7 @@ class _ElectricityBillState extends State<ElectricityBill> {
 
       // Create a reference to the storage
       Reference storageRef =
-      FirebaseStorage.instance.ref().child('electricity_bills/$userId/$customName');
+      FirebaseStorage.instance.ref().child('hardware_bills/$userId/$customName');
 
       // Upload to Firebase Storage
       UploadTask uploadTask = storageRef.putFile(file);
@@ -71,7 +70,7 @@ class _ElectricityBillState extends State<ElectricityBill> {
       String downloadUrl = await snapshot.ref.getDownloadURL();
 
       // Save metadata in Firestore with user ID
-      await FirebaseFirestore.instance.collection('electricity_bills').add({
+      await FirebaseFirestore.instance.collection('hardware_bills').add({
         'name': customName,
         'url': downloadUrl,
         'type': file.path.endsWith('.pdf') ? 'pdf' : 'image', // Assume images or PDFs
@@ -102,7 +101,7 @@ class _ElectricityBillState extends State<ElectricityBill> {
     }
   }
 
-  // Pick a PDF file or image for the electricity bill and save it to Firebase
+  // Pick a PDF file or image for the hardware bill and save it to Firebase
   Future<void> _pickBill() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
